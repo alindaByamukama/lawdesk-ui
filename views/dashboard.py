@@ -50,13 +50,13 @@ def show():
     col1, col2, col3 = st.columns(3, gap="large")
     with col1:
         st.markdown("**Open matters**")
-        st.markdown(f"### {len(open_cases)}")
+        st.markdown(f"<h3 style='margin:0'>{len(open_cases)}</h3>", unsafe_allow_html=True)
     with col2:
         st.markdown("**Adjourned**")
-        st.markdown(f"### {len(adjourned)}")
+        st.markdown(f"<h3 style='margin:0'>{len(adjourned)}</h3>", unsafe_allow_html=True)
     with col3:
         st.markdown("**Hearings this week**")
-        st.markdown(f"### {len(upcoming)}")
+        st.markdown(f"<h3 style='margin:0'>{len(upcoming)}</h3>", unsafe_allow_html=True)
 
     st.markdown("---")
 

@@ -117,7 +117,14 @@ def show():
             date_str = case["next_hearing_date"][:10] if case.get("next_hearing_date") else "—"
             st.caption(date_str)
         with col5:
-            if st.button(case["status"], key=f"case_{case['id']}"):
+            status_labels = {
+                "OPEN": "Open",
+                "ADJOURNED": "Adj.",
+                "PENDING": "Pending",
+                "CLOSED": "Closed"
+            }
+            label = status_labels.get(case["status"], case["status"])
+            if  st.button(label, key=f"case_{case['id']}"):
                 st.session_state.selected_case = case["id"]
                 st.session_state.page = "case_detail"
                 st.rerun()
