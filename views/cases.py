@@ -1,7 +1,7 @@
 import streamlit as st
-from api.cases import get_cases, update_case_status
+from api.clients import get_clients
+from api.cases import get_cases, update_case_status, create_case
 from utils.session import is_authenticated, logout
-
 
 def show():
     if not is_authenticated():
@@ -29,6 +29,41 @@ def show():
             st.rerun()
 
     st.markdown("---")
+
+    # Create case form
+    with st.expander("➕ Add new case", expanded=False):
+        # Fetch clients for dropdown
+        clients_data = get_clients()
+        client_options = {}
+        if clients_data:
+            for c in clients_data.get("results", []):
+                client_options[c["name"]] = c["id"]
+
+        if not client_options:
+            st.warning("No clients found. Please add a client first.")
+        else:
+            with st.form("create_case_form", clear_on_submit=True):
+                client_name = st.selectbox("Client *", options=list(client_options.keys()))
+                case_number = st.text_input("Case number", placeholder="e.g. LD-004")
+                court = st.text_input("Court", placeholder="e.g. High Court Civil Division")
+                status = st.selectbox("Status", ["OPEN", "ADJOURNED", "PENDING", "CLOSED"])
+                next_hearing = st.date_input("Next hearing date", value=None)
+                submitted = st.form_submit_button("Save case", type="primary")
+
+            if submitted:
+                payload = {
+                    "client_id": client_options[client_name],
+                    "case_number": case_number.strip() or None,
+                    "court": court.strip() or None,
+                    "status": status,
+                    "next_hearing_date": str(next_hearing) if next_hearing else None,
+                }
+                result = create_case(payload)
+                if result and result.get("case_number") is not None or result.get("client"):
+                    st.success("Case created.")
+                    st.rerun()
+                else:
+                    st.error(f"Could not create case: {result}")
 
     # Filters
     with st.expander("Search & filter", expanded=True):

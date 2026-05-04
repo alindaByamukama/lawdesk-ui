@@ -78,7 +78,12 @@ def show():
     else:
         st.caption("No hearings in the next 7 days.")
 
-    st.markdown("---")
-    if st.button("View all cases →"):
-        st.session_state.page = "cases"
-        st.rerun()
+    col_nav1, col_nav2 = st.columns(2)
+    with col_nav1:
+        if st.button("View all cases →"):
+            st.session_state.page = "cases"
+            st.rerun()
+    with col_nav2:
+        if st.button("View all clients →"):
+            st.session_state.page = "clients"
+            st.rerun()
