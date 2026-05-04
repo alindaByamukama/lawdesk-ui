@@ -1,5 +1,5 @@
 import streamlit as st
-from views import landing, login, dashboard
+from views import landing, login, dashboard, cases
 
 if "page" not in st.session_state:
     st.session_state.page = "landing"
@@ -10,3 +10,5 @@ elif st.session_state.page == "login":
     login.show()
 elif st.session_state.page == "dashboard":
     dashboard.show()
+elif st.session_state.page == "cases":
+    cases.show()

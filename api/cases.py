@@ -8,7 +8,7 @@ BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 
 
 def get_cases(status: str = None, search: str = None,
-              next_hearing_gte: str = None, next_hearing_lte: str = None) -> dict | None:
+              next_hearing_gte: str = None, next_hearing_lte: str = None, ordering: str = None) -> dict | None:
     params = {}
     if status:
         params["status"] = status
@@ -18,6 +18,8 @@ def get_cases(status: str = None, search: str = None,
         params["next_hearing_date__gte"] = next_hearing_gte
     if next_hearing_lte:
         params["next_hearing_date__lte"] = next_hearing_lte
+    if ordering:
+        params["ordering"] = ordering
 
     return authenticated_request("get", f"{BASE_URL}/api/cases/", params=params)
 
